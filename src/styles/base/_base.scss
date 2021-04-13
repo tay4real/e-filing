@@ -1,0 +1,68 @@
+body {
+  font-family: "Raleway", sans-serif;
+  font-size: 16px;
+  color: #181818;
+}
+
+.btn-primary {
+  background-color: #00bd9c;
+}
+
+.btn-block {
+  display: block;
+  width: 100%;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.btn-group-lg > .btn,
+.btn-lg {
+  padding: 10px 16px;
+  font-size: 18px;
+  line-height: 1.33;
+  border-radius: 3px;
+}
+
+.main-pane {
+  background-color: #eff2f5;
+  min-height: 91vh;
+
+  .card {
+    min-height: 85vh;
+    min-width: 95%;
+  }
+}
+
+.top-nav {
+  background-color: #ffffff;
+  min-height: 8.5vh;
+}
+
+.top-header {
+  color: #2f4358;
+}
+
+.btn-action {
+  border-color: #00bd9c !important;
+  color: #00bd9c !important;
+  width: 10rems !important;
+  height: 0.5rems !important;
+}
+
+.btn-action:hover {
+  background-color: #00bd9c !important;
+  color: #ffffff !important;
+  width: 10rems !important;
+  height: 0.5rems !important;
+}
+
+.required {
+  color: #ff8482;
+}
+
+.card-link a:link,
+a:visited,
+a:hover,
+a:active {
+  text-decoration: none;
+}

@@ -1,0 +1,37 @@
+.signin-container {
+  display: "flex";
+  align-items: "center";
+  justify-content: "center";
+  width: "100vw";
+  height: "100vh";
+  background-color: "#263648" !important;
+}
+.form-signin-heading {
+  margin: 0 0 20px;
+  text-align: center;
+  letter-spacing: 2px;
+  color: #2a333d;
+  font-size: 24px;
+  font-weight: 300;
+}
+
+.form-signin {
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translate(-50%, 0);
+  margin: 0 auto;
+  max-width: 300px;
+}
+
+.signin-logo {
+  margin: 40px auto;
+  max-width: 200px;
+}
+
+.signin-contents {
+  border-radius: 10px;
+  background: #dde5ee;
+  padding: 20px;
+  width: 300px;
+}
