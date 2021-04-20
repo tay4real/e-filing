@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import { NavLink } from "react-router-dom";
-import { useAllUsers } from "../../../hooks/users";
+import useAllUsers from "../../../hooks/allusers";
 import Loader from "../../../components/Loader";
 import { Row, Button, Card } from "react-bootstrap";
 import { FaSearch, FaUserEdit } from "react-icons/fa";

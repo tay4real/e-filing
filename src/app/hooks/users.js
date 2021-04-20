@@ -1,40 +1,37 @@
-import { useEffect } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { fetchAllUsers } from "../redux/actions/adminActions";
-import { fetchUser } from "../redux/actions/userActions";
-import history from "../history";
+import React, { useEffect, useState, useCallback } from "react";
+import { useSelector, useDispatch, shallowEqual } from "react-redux";
 
-export const useAuth = () => {
-  const { userInfos, loading, error } = useSelector((state) => state.user);
-  console.log(userInfos, loading, error);
+import { fetchUser, authUser } from "../redux/actions/userActions";
+
+import { useHistory } from "react-router-dom";
+
+const useAuth = () => {
+  const history = useHistory();
+  let { user, loading, isAuth, error } = useSelector((state) => state.user);
+
   const dispatch = useDispatch();
-
   useEffect(() => {
+    getUserData();
+    authhenticateUser(user);
+    if (error) {
+      history.push("/auth/login");
+    }
+  }, [user]);
+
+  const authhenticateUser = async (user) => {
+    if (user) {
+      if (Object.entries(user).length !== 0) {
+        authUser(true);
+      } else {
+        authUser(false);
+      }
+    }
+  };
+
+  const getUserData = () => {
     dispatch(fetchUser());
-
-    if (error) {
-      history.push({
-        pathname: "/auth/login",
-      });
-    }
-  }, [dispatch, error]);
-
-  return [userInfos, loading];
+  };
+  return [user, loading, isAuth];
 };
 
-export const useAllUsers = () => {
-  const { allUsers, loading, error } = useSelector((state) => state.admin);
-
-  const dispatch = useDispatch();
-
-  useEffect(() => {
-    dispatch(fetchAllUsers());
-    if (error) {
-      console.log(error);
-    }
-  }, [dispatch, error]);
-
-  return [allUsers, loading, error];
-};
-
-export default useAllUsers;
+export default useAuth;

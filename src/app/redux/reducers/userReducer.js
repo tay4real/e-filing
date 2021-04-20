@@ -1,16 +1,21 @@
 import { user_action_types as c } from "../actions/constants";
 
 const initialState = {
-  userInfos: {},
+  user: null,
   loading: true,
   error: null,
   success: null,
+  isAuth: false,
 };
 
 export default function userReducer(state = initialState, action) {
   switch (action.type) {
     case c.SET_USER_DATA:
-      return { ...state, userInfos: action.payload, loading: false };
+      return {
+        ...state,
+        user: action.payload,
+        loading: false,
+      };
 
     case c.SET_ERROR_OPERATION:
       return {
@@ -31,8 +36,9 @@ export default function userReducer(state = initialState, action) {
         ...state,
       };
     }
-    case c.USER_LOGGED_OUT: {
-      return state;
+
+    case c.SET_IS_AUTH: {
+      return { ...state, isAuth: action.payload };
     }
 
     default:

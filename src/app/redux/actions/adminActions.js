@@ -68,7 +68,7 @@ export function addNewUser(userInfo) {
   return async (dispatch) => {
     dispatch(setSuccess(null));
     try {
-      const res = await fetchBackend.get("/admin/users/new", userInfo);
+      const res = await fetchBackend.get("/auth/register", userInfo);
       if (res.data) {
         dispatch(setSuccess("User Added Successfully"));
       }

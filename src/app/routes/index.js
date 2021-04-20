@@ -1,16 +1,16 @@
 import BlankLayout from "../layouts/BlankLayout";
 import MainLayout from "../layouts/MainLayout";
 
-import Login from "../view/auth/Login";
-
 import Home from "../view/home/dashboard/Dashboard";
+
 import Users from "../view/admin/users/Users";
 import NewUser from "../view/admin/users/AddUser";
 import UserDetail from "../view/admin/users/UserDetail";
 import EditUser from "../view/admin/users/EditUser";
-import Departments from "../view/admin/department/Departments";
+import DepartmentList from "../view/admin/department/DepartmentList";
+import Department from "../view/admin/department/Department";
 import AddDepartment from "../view/admin/department/AddDepartment";
-import EditDepartment from "../view/admin/department/EditDepartment";
+
 import Trash from "../view/admin/trash/Trash";
 import Files from "../view/users/files/Files";
 import NewFile from "../view/users/files/NewFile";
@@ -29,22 +29,16 @@ import ForgotPassword from "../view/users/profile/ForgotPassword";
 const routes = [
   {
     path: "/",
-    exact: true,
     component: Home,
     layout: MainLayout,
     isProtected: true,
   },
-  {
-    path: "/auth/login",
-    component: Login,
-    layout: BlankLayout,
-    isProtected: false,
-  },
+
   {
     path: "/auth/forgotpassword",
     component: ForgotPassword,
     layout: BlankLayout,
-    isProtected: true,
+    isProtected: false,
   },
 
   {
@@ -98,22 +92,17 @@ const routes = [
   },
   {
     path: "/admin/departments",
-    component: Departments,
+    component: DepartmentList,
     layout: MainLayout,
     isProtected: true,
   },
   {
     path: "/admin/department/:id",
-    component: Departments,
+    component: Department,
     layout: MainLayout,
     isProtected: true,
   },
-  {
-    path: "/admin/edit/department/:id",
-    component: EditDepartment,
-    layout: MainLayout,
-    isProtected: true,
-  },
+
   {
     path: "/admin/new/department",
     component: AddDepartment,

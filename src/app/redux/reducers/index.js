@@ -1,7 +1,7 @@
 import { combineReducers } from "redux";
 import user from "./userReducer";
 import admin from "./adminReducer";
-import depts from "./deptReducer";
+import depts from "./departments";
 import files from "./fileReducer";
 import mails from "./mailReducer";
 import componentsReducer from "./componentsReducer";

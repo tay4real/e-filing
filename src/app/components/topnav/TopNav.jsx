@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { NavLink } from "react-router-dom";
+import { NavLink, useHistory, useLocation } from "react-router-dom";
 import { Image } from "react-bootstrap";
 import { connect } from "react-redux";
 import { FaSearch } from "react-icons/fa";
@@ -9,6 +9,8 @@ import { logout } from "../../redux/actions/userActions";
 const logo = "/images/efiling_logo_mdw.png";
 
 export const TopNav = (props) => {
+  const history = useHistory();
+  const location = useLocation();
   const dispatch = useDispatch();
   const [isOpen, setSearchBox] = useState(false);
 
@@ -23,6 +25,7 @@ export const TopNav = (props) => {
 
   const handleLogout = () => {
     dispatch(logout());
+    history.push("/auth/login");
   };
   return (
     <nav

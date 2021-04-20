@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { Modal, Button, Form, Col } from "react-bootstrap";
-import { addNewDept } from "../../redux/actions/deptActions";
 
 export const AddDepartment = (props) => {
   const [newDepartment, setNewDepartment] = useState({
@@ -26,7 +25,6 @@ export const AddDepartment = (props) => {
     e.preventDefault();
 
     if (newDepartment.dept_name !== "" && newDepartment.dept_level !== "") {
-      dispatch(addNewDept(newDepartment));
       props.onHide();
     } else {
       props.onHide();
@@ -81,16 +79,6 @@ export const AddDepartment = (props) => {
               </Form.Control>
             </Form.Group>
           </Form.Row>
-
-          <Form.Group id="formGridCheckbox">
-            <Form.Check
-              type="switch"
-              id="custom-switch"
-              value={newDepartment.status}
-              label="Activate Department"
-              onChange={handleChange}
-            />
-          </Form.Group>
         </Modal.Body>
 
         <Modal.Footer>

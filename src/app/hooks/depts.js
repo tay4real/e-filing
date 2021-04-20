@@ -1,6 +1,5 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchAllDepartments } from "../redux/actions/deptActions";
 
 export const useDepts = () => {
   const { departments, loading, error } = useSelector((state) => state.depts);
@@ -8,7 +7,6 @@ export const useDepts = () => {
   const dispatch = useDispatch();
 
   useEffect(() => {
-    dispatch(fetchAllDepartments());
     if (error) {
       console.log(error);
     }

@@ -28,13 +28,34 @@ export function setUserSuccess(message) {
   };
 }
 
+export function setUserLogOut() {
+  return (dispatch) => {
+    dispatch({
+      type: c.USER_LOGGED_OUT,
+    });
+  };
+}
+
+export function setUserIsAuthenticated(auth) {
+  return (dispatch) => {
+    dispatch({
+      type: c.SET_IS_AUTH,
+      payload: auth,
+    });
+  };
+}
+
 export function fetchUser() {
   return async (dispatch) => {
     try {
       const res = await fetchBackend.get("/users/me");
-      dispatch(setUserData(res.data));
+      if (res.statusText === "OK") {
+        dispatch(setUserData(res.data));
+      }
     } catch (error) {
-      dispatch(setUserFailure(error));
+      if (error.response) {
+        dispatch(setUserFailure(error.response.data));
+      }
     }
   };
 }
@@ -47,20 +68,23 @@ export function editUser(data) {
         dispatch(setUserSuccess("User Record updated successfully"));
       }
     } catch (error) {
-      dispatch(setUserFailure(error));
+      if (error.response) {
+        dispatch(setUserFailure(error.response.data));
+      }
     }
   };
 }
 
 export function logout() {
   return async (dispatch) => {
-    try {
-      const res = await fetchBackend.post("/auth/logout");
-      if (res.data) {
-        dispatch(setUserSuccess(res.data.message));
-      }
-    } catch (error) {
-      dispatch(setUserFailure(error));
-    }
+    localStorage.removeItem("accessToken");
+    dispatch(setUserLogOut());
+    window.location.replace("/auth/login");
+  };
+}
+
+export function authUser(auth) {
+  return async (dispatch) => {
+    dispatch(setUserIsAuthenticated(auth));
   };
 }

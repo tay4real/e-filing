@@ -12,16 +12,17 @@ export const Dashboard = (props) => {
     <>
       <div className="navbar navbar-light bg-light py-0">
         <div className="container-fluid">
-          <NavLink to="/" className="navbar-brand">
-            {props.user.role} Dashboard
+          <NavLink to="/" className="navbar-brand d-flex flex-column">
+            Dashboard
           </NavLink>
+
           <div>
             <nav aria-label="breadcrumb">
               <ol className="breadcrumb">
                 <li className="breadcrumb-item">
                   <NavLink to="/">Home</NavLink>
                 </li>
-                <li className="breadcrumb-item active" aria-current="page">
+                <li className="breadcrumb-item active " aria-current="page">
                   Dashboard
                 </li>
               </ol>

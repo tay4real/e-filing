@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { Form, Button, Spinner } from "react-bootstrap";
-import { Link, Redirect } from "react-router-dom";
-
+import { Link, Redirect, useHistory } from "react-router-dom";
+import useAuth from "../../hooks/users";
 import { fetchBackend } from "../../services";
 import { DangerAlert } from "../../components";
 
 const logo = "/images/e-filing-logo.png";
 
 function Login() {
+  const history = useHistory();
   const [credentials, setCredentials] = useState({ email: "", password: "" });
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
+  const [user] = useAuth();
 
   const handleChange = (e) => {
     setCredentials({ ...credentials, [e.target.name]: e.target.value });
@@ -18,22 +20,31 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError(null);
     setLoading(true);
     try {
       const res = await fetchBackend.post("/auth/login", credentials);
-      console.log(res);
-      setLoading(false);
       if (res.statusText === "OK") {
-        <Redirect to="/" />;
+        localStorage.setItem("accessToken", res.data.accessToken);
       }
-    } catch (error) {
       setLoading(false);
-      if (error.response.status === 401) {
-        setError("Username or password is incorrect");
-      } else {
-        setError(error.message);
+      setCredentials({ email: "", password: "" });
+      if (user) {
       }
-      setError(error.message);
+      window.location.replace("/");
+    } catch (error) {
+      if (error.response) {
+        setLoading(false);
+        if (error.response.status === 404) {
+          history.push("/404");
+        } else {
+          setError(error.response.data);
+        }
+      } else if (error.request) {
+        setError("Sorry, there is a network problem. Retry again");
+      } else {
+        // anything else
+      }
     }
   };
 
