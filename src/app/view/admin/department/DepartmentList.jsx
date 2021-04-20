@@ -1,11 +1,8 @@
 import React, { Component } from "react";
 import { connect } from "react-redux";
 import { Link } from "react-router-dom";
-
-import Loader from "../../../components/Loader";
-import { Row, Button, Card } from "react-bootstrap";
-import { FaSearch, FaUserEdit } from "react-icons/fa";
-import { MdDelete } from "react-icons/md";
+import Pagination from "@material-ui/lab/Pagination";
+import DepartmentDataService from "../../../services/DepartmentService";
 
 import {
   retrieveDepartments,
@@ -19,16 +16,26 @@ class DepartmentList extends Component {
     this.onChangeSearchDepartmentName = this.onChangeSearchDepartmentName.bind(
       this
     );
+    this.retrieveDepartments = this.retrieveDepartments.bind(this);
     this.refreshData = this.refreshData.bind(this);
     this.setActiveDepartment = this.setActiveDepartment.bind(this);
     this.findByName = this.findByName.bind(this);
     this.removeAllDepartments = this.removeAllDepartments.bind(this);
+    this.handlePageChange = this.handlePageChange.bind(this);
+    this.handlePageSizeChange = this.handlePageSizeChange.bind(this);
 
     this.state = {
+      departments: [],
       currentDepartment: null,
       currentIndex: -1,
       searchDepartmentName: "",
+
+      page: 1,
+      count: 0,
+      pageSize: 3,
     };
+
+    this.pageSizes = [3, 6, 9];
   }
 
   componentDidMount() {
@@ -41,6 +48,43 @@ class DepartmentList extends Component {
     this.setState({
       searchDepartmentName: searchDepartmentName,
     });
+  }
+
+  getRequestParams(searchName, page, pageSize) {
+    let params = {};
+
+    if (searchName) {
+      params["dept_name"] = searchName;
+    }
+
+    if (page) {
+      params["page"] = page - 1;
+    }
+
+    if (pageSize) {
+      params["size"] = pageSize;
+    }
+
+    return params;
+  }
+
+  retrieveDepartments() {
+    const { searchName, page, pageSize } = this.state;
+    const params = this.getRequestParams(searchName, page, pageSize);
+
+    DepartmentDataService.getAll(params)
+      .then((response) => {
+        const { departments, totalPages } = response.data;
+
+        this.setState({
+          departments: departments,
+          count: totalPages,
+        });
+        console.log(response.data);
+      })
+      .catch((e) => {
+        console.log(e);
+      });
   }
 
   refreshData() {
@@ -75,13 +119,40 @@ class DepartmentList extends Component {
     this.props.findDepartmentsByName(this.state.searchDepartmentName);
   }
 
+  handlePageChange(event, value) {
+    this.setState(
+      {
+        page: value,
+      },
+      () => {
+        this.retrieveDepartments();
+      }
+    );
+  }
+
+  handlePageSizeChange(event) {
+    this.setState(
+      {
+        pageSize: event.target.value,
+        page: 1,
+      },
+      () => {
+        this.retrieveDepartments();
+      }
+    );
+  }
+
   render() {
     const {
       searchDepartmentName,
+      departments,
       currentDepartment,
       currentIndex,
+      page,
+      count,
+      pageSize,
     } = this.state;
-    const { departments } = this.props;
+    //const { departments } = this.props;
     return (
       <>
         <div className="list row">
@@ -107,6 +178,28 @@ class DepartmentList extends Component {
           </div>
           <div className="col-md-6">
             <h4>Departmnent List</h4>
+
+            <div className="mt-3">
+              {"Items per Page: "}
+              <select onChange={this.handlePageSizeChange} value={pageSize}>
+                {this.pageSizes.map((size) => (
+                  <option key={size} value={size}>
+                    {size}
+                  </option>
+                ))}
+              </select>
+
+              <Pagination
+                className="my-3"
+                count={count}
+                page={page}
+                siblingCount={1}
+                boundaryCount={1}
+                variant="outlined"
+                shape="rounded"
+                onChange={this.handlePageChange}
+              />
+            </div>
 
             <ul className="list-group">
               {departments &&
@@ -141,14 +234,7 @@ class DepartmentList extends Component {
                   </label>{" "}
                   {currentDepartment.dept_name}
                 </div>
-                <div>
-                  <label>
-                    <strong>Hierachy:</strong>
-                  </label>{" "}
-                  {currentDepartment.dept_level === "1" && "Level 1"}
-                  {currentDepartment.dept_level === "2" && "Level 2"}
-                  {currentDepartment.dept_level === "3" && "Level 3"}
-                </div>
+
                 <div>
                   <label>
                     <strong>Status:</strong>

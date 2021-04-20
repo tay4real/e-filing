@@ -5,14 +5,13 @@ import {
   deleteDepartment,
 } from "../../../redux/actions/departments";
 import DepartmentDataService from "../../../services/DepartmentService";
+import { Spinner, Form, Col } from "react-bootstrap";
 
 class Department extends Component {
   constructor(props) {
     super(props);
     this.onChangeName = this.onChangeName.bind(this);
-    this.onChangeLevel = this.onChangeLevel.bind(this);
     this.getDepartment = this.getDepartment.bind(this);
-
     this.updateContent = this.updateContent.bind(this);
     this.updateStatus = this.updateStatus.bind(this);
     this.removeDepartment = this.removeDepartment.bind(this);
@@ -21,7 +20,6 @@ class Department extends Component {
       currentDepartment: {
         _id: null,
         dept_name: "",
-        dept_level: "",
         status: 0,
       },
       message: "",
@@ -33,27 +31,16 @@ class Department extends Component {
   }
 
   onChangeName(e) {
-    const name = e.target.value;
+    const dept_name = e.target.value;
 
     this.setState(function (prevState) {
       return {
-        currentTutorial: {
-          ...prevState.currentTutorial,
-          dept_name: name,
+        currentDepartment: {
+          ...prevState.currentDepartment,
+          dept_name: dept_name,
         },
       };
     });
-  }
-
-  onChangeLevel(e) {
-    const level = e.target.value;
-
-    this.setState((prevState) => ({
-      currentTutorial: {
-        ...prevState.currentDepartment,
-        dept_level: level,
-      },
-    }));
   }
 
   getDepartment(id) {
@@ -133,27 +120,19 @@ class Department extends Component {
         {currentDepartment ? (
           <div className="edit-form">
             <h4>Department</h4>
-            <form>
-              <div className="form-group">
-                <label htmlFor="title">Name</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="dept_name"
-                  value={currentDepartment.dept_name}
-                  onChange={this.onChangeName}
-                />
-              </div>
-              <div className="form-group">
-                <label htmlFor="description">Department Hierachy</label>
-                <input
-                  type="text"
-                  className="form-control"
-                  id="dept_level"
-                  value={currentDepartment.dept_level}
-                  onChange={this.onChangeLevel}
-                />
-              </div>
+            <Form>
+              <Form.Row>
+                <Form.Group as={Col} controlId="formGridEmail">
+                  <Form.Label>Department</Form.Label>
+                  <Form.Control
+                    type="name"
+                    name="dept_name"
+                    value={currentDepartment.dept_name}
+                    placeholder="Enter Department name"
+                    onChange={this.onChangeName}
+                  />
+                </Form.Group>
+              </Form.Row>
 
               <div className="form-group">
                 <label>
@@ -161,7 +140,7 @@ class Department extends Component {
                 </label>
                 {currentDepartment.status === 0 ? "Active" : "Inactive"}
               </div>
-            </form>
+            </Form>
 
             {currentDepartment.status === 0 ? (
               <button

@@ -10,7 +10,6 @@ export const AddDepartment = (props) => {
   const initialDepartmentState = {
     id: null,
     dept_name: "",
-    dept_level: "",
     status: 0,
   };
   const [department, setDepartment] = useState(initialDepartmentState);
@@ -26,18 +25,18 @@ export const AddDepartment = (props) => {
 
   const saveDepartment = () => {
     setLoading(true);
-    const { dept_name, dept_level } = department;
+    const { dept_name } = department;
 
-    console.log({ dept_name, dept_level });
-    dispatch(createDepartment({ dept_name, dept_level }))
+    console.log({ dept_name });
+    dispatch(createDepartment({ dept_name }))
       .then((data) => {
         setDepartment({
           id: data._id,
           dept_name: data.dept_name,
-          dept_level: data.dept_level,
           status: data.status,
         });
         setSubmitted(true);
+
         setLoading(false);
         console.log(data);
       })
@@ -100,25 +99,8 @@ export const AddDepartment = (props) => {
               </Form.Group>
             </Form.Row>
 
-            <Form.Row>
-              <Form.Group as={Col} controlId="formGridState">
-                <Form.Label>Hierachy Level</Form.Label>
-                <Form.Control
-                  as="select"
-                  name="dept_level"
-                  defaultValue="Choose..."
-                  onChange={handleInputChange}
-                >
-                  <option>Choose...</option>
-                  <option value="1"> Level 1</option>
-                  <option value="2"> Level 2</option>
-                  <option value="3">Level 3</option>
-                </Form.Control>
-              </Form.Group>
-            </Form.Row>
-
             <button onClick={saveDepartment} className="btn btn-success">
-              {loading && <Spinner animation="border" />} Submit
+              {loading && <Spinner animation="border" />} Add Department
             </button>
           </div>
         )}

@@ -9,19 +9,11 @@ const get = (id) => {
 };
 
 const create = (data) => {
-  return fetchBackend.post("/depts/add/new", data);
+  return fetchBackend.post("/depts", data);
 };
 
 const update = (id, data) => {
   return fetchBackend.put(`/depts/${id}`, data);
-};
-
-const remove = (id) => {
-  return fetchBackend.put(`/depts/trash/${id}`);
-};
-
-const restore = (id) => {
-  return fetchBackend.put(`/depts/restore/${id}`);
 };
 
 const deleteDepartment = (id) => {
@@ -41,7 +33,6 @@ export default {
   get,
   create,
   update,
-  remove,
   deleteDepartment,
   deleteAll,
   findByName,
