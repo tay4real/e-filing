@@ -16,9 +16,9 @@ export const createDepartment = (data) => async (dispatch) => {
   }
 };
 
-export const retrieveDepartments = () => async (dispatch) => {
+export const retrieveDepartments = (url) => async (dispatch) => {
   try {
-    const res = await DepartmentDataService.getAll();
+    const res = await DepartmentDataService.getAll(url);
 
     dispatch({
       type: c.RETRIEVE_DEPARTMENTS,

@@ -3,6 +3,7 @@ import { connect } from "react-redux";
 import { Link } from "react-router-dom";
 import Pagination from "@material-ui/lab/Pagination";
 import DepartmentDataService from "../../../services/DepartmentService";
+import { Form } from "react-bootstrap";
 
 import {
   retrieveDepartments,
@@ -16,71 +17,59 @@ class DepartmentList extends Component {
     this.onChangeSearchDepartmentName = this.onChangeSearchDepartmentName.bind(
       this
     );
+    this.onChangeQueryString = this.onChangeQueryString.bind(this);
     this.retrieveDepartments = this.retrieveDepartments.bind(this);
     this.refreshData = this.refreshData.bind(this);
     this.setActiveDepartment = this.setActiveDepartment.bind(this);
     this.findByName = this.findByName.bind(this);
     this.removeAllDepartments = this.removeAllDepartments.bind(this);
-    this.handlePageChange = this.handlePageChange.bind(this);
-    this.handlePageSizeChange = this.handlePageSizeChange.bind(this);
+    this.retrieveDepartments = this.retrieveDepartments.bind(this);
 
     this.state = {
       departments: [],
       currentDepartment: null,
       currentIndex: -1,
       searchDepartmentName: "",
-
-      page: 1,
-      count: 0,
-      pageSize: 3,
+      queryString: "",
+      page: 5,
     };
 
-    this.pageSizes = [3, 6, 9];
+    this.pageSizes = [5, 10, 15];
   }
 
   componentDidMount() {
-    this.props.retrieveDepartments();
+    this.retrieveDepartments();
   }
 
   onChangeSearchDepartmentName(e) {
-    const searchDepartmentName = e.target.value;
+    const searchDepartmentName = "limit=" + e.target.value;
 
     this.setState({
       searchDepartmentName: searchDepartmentName,
     });
+    console.log(this.state.searchDepartmentName);
   }
 
-  getRequestParams(searchName, page, pageSize) {
-    let params = {};
+  onChangeQueryString(e) {
+    const queryString = "limit=" + e.target.value;
 
-    if (searchName) {
-      params["dept_name"] = searchName;
-    }
-
-    if (page) {
-      params["page"] = page - 1;
-    }
-
-    if (pageSize) {
-      params["size"] = pageSize;
-    }
-
-    return params;
+    this.setState({
+      queryString: queryString,
+      page: e.target.value,
+    });
+    console.log(this.state.queryString, this.state.queryString);
   }
 
   retrieveDepartments() {
-    const { searchName, page, pageSize } = this.state;
-    const params = this.getRequestParams(searchName, page, pageSize);
+    const url = "/depts?" + this.state.queryString;
 
-    DepartmentDataService.getAll(params)
+    DepartmentDataService.getAll(url)
       .then((response) => {
-        const { departments, totalPages } = response.data;
+        const departments = response.data;
 
         this.setState({
           departments: departments,
-          count: totalPages,
         });
-        console.log(response.data);
       })
       .catch((e) => {
         console.log(e);
@@ -115,44 +104,18 @@ class DepartmentList extends Component {
 
   findByName() {
     this.refreshData();
-
     this.props.findDepartmentsByName(this.state.searchDepartmentName);
-  }
-
-  handlePageChange(event, value) {
-    this.setState(
-      {
-        page: value,
-      },
-      () => {
-        this.retrieveDepartments();
-      }
-    );
-  }
-
-  handlePageSizeChange(event) {
-    this.setState(
-      {
-        pageSize: event.target.value,
-        page: 1,
-      },
-      () => {
-        this.retrieveDepartments();
-      }
-    );
   }
 
   render() {
     const {
       searchDepartmentName,
-      departments,
       currentDepartment,
       currentIndex,
-      page,
-      count,
       pageSize,
     } = this.state;
-    //const { departments } = this.props;
+    const departments = this.state.departments.depts;
+
     return (
       <>
         <div className="list row">
@@ -169,7 +132,7 @@ class DepartmentList extends Component {
                 <button
                   className="btn btn-outline-secondary"
                   type="button"
-                  onClick={this.findByName}
+                  onClick={this.setPageSize}
                 >
                   Search
                 </button>
@@ -177,29 +140,30 @@ class DepartmentList extends Component {
             </div>
           </div>
           <div className="col-md-6">
-            <h4>Departmnent List</h4>
+            <h4>Department List</h4>
 
             <div className="mt-3">
               {"Items per Page: "}
-              <select onChange={this.handlePageSizeChange} value={pageSize}>
-                {this.pageSizes.map((size) => (
-                  <option key={size} value={size}>
-                    {size}
-                  </option>
-                ))}
+              <select
+                className="form-select form-select-lg px-2 py-1"
+                onChange={this.onChangeQueryString}
+                value={pageSize}
+              >
+                <option>5</option>
+                <option>10</option>
+                <option>15</option>
               </select>
-
-              <Pagination
-                className="my-3"
-                count={count}
-                page={page}
-                siblingCount={1}
-                boundaryCount={1}
-                variant="outlined"
-                shape="rounded"
-                onChange={this.handlePageChange}
-              />
             </div>
+
+            <Form.Control
+              as="select"
+              onChange={this.onChangeSearchDepartmentName}
+              custom
+            >
+              <option>10</option>
+              <option>15</option>
+              <option>20</option>
+            </Form.Control>
 
             <ul className="list-group">
               {departments &&

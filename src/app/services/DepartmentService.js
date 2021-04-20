@@ -1,7 +1,8 @@
 import { fetchBackend } from ".";
 
-const getAll = () => {
-  return fetchBackend.get("/depts");
+const getAll = (params = "/depts") => {
+  const url = params;
+  return fetchBackend.get(url);
 };
 
 const get = (id) => {
